@@ -11,13 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pato.finaltuimiapp.data.model.User;
+
 public class LoginActivity extends AppCompatActivity {
 
     Button botonEntrar;
     Button registrar;
-    EditText usuario;
-    EditText contraseña;
-    static Usuario  usuarioNuevo;
+    EditText user;
+    EditText pass;
+    static User usuarioNuevo;
     private Context context;
     private SharedPreferences sharedPreferences;
     TextView textnombre;
@@ -30,13 +32,13 @@ public class LoginActivity extends AppCompatActivity {
 
         registrar = (Button) findViewById(R.id.registrar);
         botonEntrar = (Button) findViewById(R.id.botonEntrar);
-        usuario = (EditText) findViewById(R.id.usuario);
-        contraseña = (EditText) findViewById(R.id.contraseña);
+        user = (EditText) findViewById(R.id.etPass);
+        pass = (EditText) findViewById(R.id.etPass);
         context = this;
 
 
         //usuario nuevo harcodeado
-        usuarioNuevo = new Usuario(usuario, contraseña);
+        usuarioNuevo = new User(user, pass);
 
 
         sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
@@ -57,11 +59,11 @@ public class LoginActivity extends AppCompatActivity {
             botonEntrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isLogin(usuario.getText().toString(), contraseña.getText().toString())) {
+                    if (isLogin(user.getText().toString(), pass.getText().toString())) {
                         sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
                         sharedPreferences.edit()
-                                .putString("username", usuarioNuevo.getNombre().toString())
-                                .putString("password", usuarioNuevo.getPassword().toString())
+                                .putString("username", usuarioNuevo.getUser().toString())
+                                .putString("password", usuarioNuevo.getPass().toString())
                                 .apply();
                         ingresoUsuario();
                     }else
@@ -85,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void mensajeBienvenido()
     {
-        Toast toast1 = Toast.makeText(getApplicationContext(),"Hola "+usuarioNuevo.getNombre(),Toast.LENGTH_SHORT);
+        Toast toast1 = Toast.makeText(getApplicationContext(),"Hola "+usuarioNuevo.getUser(),Toast.LENGTH_SHORT);
         toast1.show();
     }
 
@@ -95,12 +97,12 @@ public class LoginActivity extends AppCompatActivity {
         toast1.show();
     }
 
-    public static Usuario getUsuarioNuevo()
+    public static User getUsuarioNuevo()
     {
         return usuarioNuevo;
     }
 
     private boolean isLogin(String user, String pass) {
-        return user.equals(usuarioNuevo.getNombre().toString()) && pass.equals(usuarioNuevo.getPassword().toString());
+        return user.equals(usuarioNuevo.getUser().toString()) && pass.equals(usuarioNuevo.getPass().toString());
     }
 }
