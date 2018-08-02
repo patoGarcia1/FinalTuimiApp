@@ -39,7 +39,7 @@ public class RegistroActivity extends AppCompatActivity {
         etPass2 = (EditText) findViewById(R.id.etPass2);
         bt1 = (Button) findViewById(R.id.bt1);
 
-        APIServ = APIUtils.getAPIService();
+        //APIServ = APIUtils.getAPIService();
 
 
 
