@@ -1,40 +1,32 @@
 package com.example.pato.finaltuimiapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pato.finaltuimiapp.data.model.User;
-import com.example.pato.finaltuimiapp.data.remote.APIService;
-import com.example.pato.finaltuimiapp.data.remote.OnSuccessCallback;
-import com.example.pato.finaltuimiapp.data.remote.RetrofitClient;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.pato.finaltuimiapp.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button botonEntrar;
-    Button registrar;
-    EditText etUser;
-    EditText etPass;
-    static User usuarioNuevo;
-    private Context context;
-    private APIService APIServ;
-    private SharedPreferences sharedPreferences;
-    TextView textnombre;
-    TextView textmail;
+    private Button botonEntrar;
+    private Button registrar;
+    private EditText etUser;
+    private EditText etPass;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
+    private String userId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +38,9 @@ public class LoginActivity extends AppCompatActivity {
         etUser = (EditText) findViewById(R.id.etUser);
         etPass = (EditText) findViewById(R.id.etPass);
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
-
-        //usuario nuevo harcodeado
-        usuarioNuevo = new User(etUser, etPass);
+        databaseReference = firebaseDatabase.getReference("usuarios");
 
 
 
@@ -64,44 +55,30 @@ public class LoginActivity extends AppCompatActivity {
             botonEntrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final String usuario = etUser.getText().toString().trim();
-                    final String contraseña =  etPass.getText().toString().trim();
+                    databaseReference.child("usuarios").child(userId).
+                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    User user = dataSnapshot.getValue(User.class);
+                                    //displayAdForUpdate(cAd);
+                                }
 
-                    RetrofitClient.getUser(new OnSuccessCallback() {
-                        @Override
-                        public void execute(Object body) {
-                            //Lo que se debe hacer con la respuesta del servidor
-                            //ListView postLv = (ListView) findViewById(R.id.postLv); //El listview
-                            Toast.makeText(context, "Banca", Toast.LENGTH_SHORT).show();
-                            //Le asigno el adapter, al cual le paso el contexto y la lista de posts que vino
-                            //postLv.setAdapter(new PostAdapter(getBaseContext(), (List<Post>) body));
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
 
-                        }
-                    });
+                                }
+                            });
+                    if(TextUtils.isEmpty(userId)){
 
-
-
+                        Toast.makeText(getBaseContext(), "Registrate salame", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(getBaseContext(), "Atroden", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
-
         }
-
-
-    //private void ingresoUsuario (EditText usuario, EditText contraseña)
-    private void ingresoUsuario ()
-    {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        mensajeBienvenido();
-    }
-
-    private void mensajeBienvenido()
-    {
-        Toast toast1 = Toast.makeText(getApplicationContext(),"Hola "+usuarioNuevo.getUser(),Toast.LENGTH_SHORT);
-        toast1.show();
-    }
-
-
-
-
 }
