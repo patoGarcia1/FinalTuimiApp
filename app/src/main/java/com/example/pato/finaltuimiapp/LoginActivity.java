@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        databaseReference = firebaseDatabase.getReference("usuarios");
+        databaseReference = firebaseDatabase.getReference().child("usuarios").child("userId");
 
 
 
@@ -55,25 +55,30 @@ public class LoginActivity extends AppCompatActivity {
             botonEntrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    databaseReference.child("usuarios").child(userId).
-                            addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    User user = dataSnapshot.getValue(User.class);
-                                    //displayAdForUpdate(cAd);
-                                }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
-
-                                }
-                            });
-                    if(TextUtils.isEmpty(userId)){
+                    if(TextUtils.isEmpty("userId")){
 
                         Toast.makeText(getBaseContext(), "Registrate salame", Toast.LENGTH_LONG).show();
                     }
                     else{
+                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                User user = dataSnapshot.getValue(User.class);
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
                         Toast.makeText(getBaseContext(), "Atroden", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);

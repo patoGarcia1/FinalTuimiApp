@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "737829172178",
+    "firebase_url": "https://finaltuimiapp.firebaseio.com",
+    "project_id": "FinalTuimiApp",
+    "storage_bucket": "finaltuimiapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737829172178:android:182612913bba9780",
+        "android_client_info": {
+          "package_name": "com.example.pato.finaltuimiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737829172178-n3l14jjplg33nebk0nst1ii2a8t87nmh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pato.finaltuimiapp",
+            "certificate_hash": "56680ba087d8dd7ec8a07edb995079821e79ea2e"
+          }
+        },
+        {
+          "client_id": "737829172178-5fmvur4rd3uvkrm9qb4i4l3cu2ktqvu4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6QavQwGGv6ToBeRhjAALGptELWEiOGaQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737829172178-5fmvur4rd3uvkrm9qb4i4l3cu2ktqvu4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
