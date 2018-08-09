@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.cameraview.CameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:adjustViewBounds="true"
+        android:keepScreenOn="true"
+        app:autoFocus="true"
+        app:cameraAspectRatio="4:3"
+        app:enableZoom="true"
+        app:facing="back"
+        app:flash="off"
+        app:maximumPreviewWidth="1280"
+        app:maximumWidth="4000"
+        app:useHighResPicture="false" />
+
+
+    <Button
+        android:id="@+id/clickcamera"
+        style="@android:style/Widget.Material.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:backgroundTint="?attr/colorControlNormal"
+        android:text="TakePicture"
+        />
+
+    <Button
+        android:id="@+id/rotarcamera"
+        style="@android:style/Widget.Material.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:backgroundTint="?attr/colorControlNormal"
+        android:text="RotarCamara"
+        />
+
+
+</FrameLayout>
