@@ -91,18 +91,18 @@ public class RegistroActivity extends AppCompatActivity {
 
                 // Check for null
                 if (user == null) {
-                    Toast.makeText(getBaseContext(), "No hay ninguna wea!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "ciova!", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                Toast.makeText(getBaseContext(), "Agregaa la wea!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Agregado!", Toast.LENGTH_LONG).show();
 
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Toast.makeText(getBaseContext(), "Cancela la wea!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Cancela!", Toast.LENGTH_LONG).show();
             }
         });
     }

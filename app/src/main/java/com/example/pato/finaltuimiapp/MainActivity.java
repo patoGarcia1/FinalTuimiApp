@@ -13,8 +13,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.pato.finaltuimiapp.model.Post;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +37,10 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        databaseReference = firebaseDatabase.getReference("usuarios");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -33,10 +51,24 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        databaseReference.child("post").orderByChild("userId")
+                .equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Post> postList = new ArrayList<Post>();
+                for (DataSnapshot adSnapshot: dataSnapshot.getChildren()) {
+                    postList.add(adSnapshot.getValue(Post.class));
+                }
+
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(), "No hay naranja", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

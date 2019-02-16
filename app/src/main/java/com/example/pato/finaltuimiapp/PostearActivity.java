@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,11 @@ import android.widget.Toast;
 
 import com.example.pato.finaltuimiapp.model.Post;
 import com.google.android.cameraview.CameraView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,6 +45,10 @@ public class PostearActivity extends AppCompatActivity {
     Post post;
     String imageString;
     String coordenada;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
+    private String userId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +83,11 @@ public class PostearActivity extends AppCompatActivity {
                     locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                     loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                    coordenada = loc.getLongitude()+"@"+loc.getLatitude();
+                    coordenada = "coordenada";
+                    //coordenada = loc.getLongitude()+"@"+loc.getLatitude();
                     post = new Post(descripcion.toString(),imageString, coordenada);
 
+                    createPost(descripcion.toString(), imageString, coordenada);
                 }
 
                 Intent main = new Intent(context, MainActivity.class);
@@ -89,6 +101,41 @@ public class PostearActivity extends AppCompatActivity {
 
     }
 
+    private void createPost(String desc, String imagen, String coord) {
+        if (TextUtils.isEmpty("userId")) {
+            userId = databaseReference.push().getKey();
+        }
+        Post post = new Post(desc, imagen, coord);
+
+        databaseReference.child(userId).setValue(post);
+
+
+        addPostChange();
+    }
+
+    public void addPostChange() {
+        databaseReference.child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Post post= dataSnapshot.getValue(Post.class);
+
+                // Check for null
+                if (post == null) {
+                    Toast.makeText(getBaseContext(), "ciova!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Toast.makeText(getBaseContext(), "Agregado!", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getBaseContext(), "Cancela!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     private void loadImageFromStorage(String path)
     {
         try {
